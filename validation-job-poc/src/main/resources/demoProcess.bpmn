@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.1">
+  <bpmn:process id="demoProcess" name="demoProcess" isExecutable="true">
+    <bpmn:startEvent id="start" name="start">
+      <bpmn:outgoing>SequenceFlow_1sz6737</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1sz6737" sourceRef="start" targetRef="Staging" />
+    <bpmn:endEvent id="end" name="end">
+      <bpmn:incoming>SequenceFlow_148rk2p</bpmn:incoming>
+      <bpmn:incoming>Flow_19knqvk</bpmn:incoming>
+      <bpmn:incoming>Flow_11t0761</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_148rk2p" sourceRef="Validation" targetRef="end" />
+    <bpmn:serviceTask id="Staging" name="Staging">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="Staging" retries="0" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1sz6737</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wfo4xl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Production" name="Production">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="Production" retries="0" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1lr5wpu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0by3g4o</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Validation" name="Validation">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="Validation" retries="0" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1glxw2o</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_148rk2p</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_197oa8b">
+      <bpmn:incoming>Flow_0wfo4xl</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lr5wpu</bpmn:outgoing>
+      <bpmn:outgoing>Flow_19knqvk</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0wfo4xl" sourceRef="Staging" targetRef="Gateway_197oa8b" />
+    <bpmn:sequenceFlow id="Flow_1lr5wpu" name="staging_success" sourceRef="Gateway_197oa8b" targetRef="Production">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=result = "success"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_19knqvk" name="staging_failure" sourceRef="Gateway_197oa8b" targetRef="end">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=result != "success"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1vef90a">
+      <bpmn:incoming>Flow_0by3g4o</bpmn:incoming>
+      <bpmn:outgoing>Flow_1glxw2o</bpmn:outgoing>
+      <bpmn:outgoing>Flow_11t0761</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0by3g4o" sourceRef="Production" targetRef="Gateway_1vef90a" />
+    <bpmn:sequenceFlow id="Flow_1glxw2o" name="production_success" sourceRef="Gateway_1vef90a" targetRef="Validation">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=result = "success"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_11t0761" name="production_failure" sourceRef="Gateway_1vef90a" targetRef="end">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=result != "sucess"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="demoProcess">
+      <bpmndi:BPMNEdge id="SequenceFlow_148rk2p_di" bpmnElement="SequenceFlow_148rk2p">
+        <di:waypoint x="1000" y="120" />
+        <di:waypoint x="1090" y="120" />
+        <di:waypoint x="1090" y="232" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="831" y="105" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1sz6737_di" bpmnElement="SequenceFlow_1sz6737">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="230" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="260" y="105" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wfo4xl_di" bpmnElement="Flow_0wfo4xl">
+        <di:waypoint x="330" y="120" />
+        <di:waypoint x="385" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lr5wpu_di" bpmnElement="Flow_1lr5wpu">
+        <di:waypoint x="435" y="120" />
+        <di:waypoint x="570" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="468" y="102" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19knqvk_di" bpmnElement="Flow_19knqvk">
+        <di:waypoint x="410" y="145" />
+        <di:waypoint x="410" y="250" />
+        <di:waypoint x="1072" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="392" y="195" width="73" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0by3g4o_di" bpmnElement="Flow_0by3g4o">
+        <di:waypoint x="670" y="120" />
+        <di:waypoint x="735" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1glxw2o_di" bpmnElement="Flow_1glxw2o">
+        <di:waypoint x="785" y="120" />
+        <di:waypoint x="900" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="786" y="76" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11t0761_di" bpmnElement="Flow_11t0761">
+        <di:waypoint x="760" y="145" />
+        <di:waypoint x="760" y="250" />
+        <di:waypoint x="1072" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="733" y="195" width="88" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="180" y="138" width="22" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_09m0goq_di" bpmnElement="Staging">
+        <dc:Bounds x="230" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_197oa8b_di" bpmnElement="Gateway_197oa8b" isMarkerVisible="true">
+        <dc:Bounds x="385" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1xu4l3g_di" bpmnElement="Validation">
+        <dc:Bounds x="900" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1vef90a_di" bpmnElement="Gateway_1vef90a" isMarkerVisible="true">
+        <dc:Bounds x="735" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0sryj72_di" bpmnElement="Production">
+        <dc:Bounds x="570" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0gbv3sc_di" bpmnElement="end">
+        <dc:Bounds x="1072" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1081" y="268" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

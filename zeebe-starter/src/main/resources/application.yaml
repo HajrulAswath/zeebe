@@ -1,0 +1,11 @@
+zeebe:
+  client:
+    broker:
+      contactPoint: "10.98.22.166:26500"
+    security:
+      plaintext: true
+    worker:
+      defaultName: multijobprocess-worker
+      
+server:
+  port: 7075      
